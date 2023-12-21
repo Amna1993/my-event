@@ -10,23 +10,31 @@ const Create = () => {
 
   const handleCreatePost = async () => {
     try {
-      // Fetch the current content of db.json from GitHub
-      const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
-      const currentData = response.data;
+      // Fetch the current content of db.json from GitHub using the GitHub API
+      const response = await axios.get(
+        'https://api.github.com/repos/Amna1993/my-event/contents/db.json'
+      );
 
-      // Create a new post object
+      // Parse the content of the file
+      const currentData = JSON.parse(
+        atob(response.data.content.replace(/\s/g, ''))
+      );
+
+      // Add a new post
       const newPost = {
-        id: currentData.length + 1, // You might want to adjust the way you generate post IDs
+        id: currentData.length + 1,
         title: newPostTitle,
       };
+
+      currentData.push(newPost);
 
       // Update the content of db.json on GitHub
       await axios.put(
         'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
         {
           message: 'Create post',
-          content: Buffer.from(JSON.stringify([...currentData, newPost])).toString('base64'),
-          sha: response.headers['etag'],
+          content: btoa(JSON.stringify(currentData)),
+          sha: response.data.sha,
         },
         {
           headers: {
