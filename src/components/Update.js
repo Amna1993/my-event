@@ -1,4 +1,3 @@
-// src/components/Update.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -16,14 +15,38 @@ const Update = () => {
 
   const handleUpdatePost = async () => {
     try {
-      
-      await axios.put(`http://localhost:8000/posts/${postId}`, {
-        title: updatedTitle,
-      });
+      // Fetch the current content of db.json from GitHub
+      const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
+      const currentData = response.data;
 
-      
-      setPostId('');
-      setUpdatedTitle('');
+      // Find the index of the post to update
+      const indexToUpdate = currentData.findIndex((post) => post.id === postId);
+
+      // If the post exists, update its title
+      if (indexToUpdate !== -1) {
+        currentData[indexToUpdate].title = updatedTitle;
+
+        // Update the content of db.json on GitHub
+        await axios.put(
+          'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
+          {
+            message: 'Update post',
+            content: Buffer.from(JSON.stringify(currentData)).toString('base64'),
+            sha: response.headers['etag'],
+          },
+          {
+            headers: {
+              Authorization: `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`, // Replace with your GitHub token
+            },
+          }
+        );
+
+        // Clear the input fields after updating a post
+        setPostId('');
+        setUpdatedTitle('');
+      } else {
+        console.error('Post not found');
+      }
     } catch (error) {
       console.error('Error updating post:', error);
     }

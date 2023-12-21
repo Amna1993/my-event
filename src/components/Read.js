@@ -7,7 +7,8 @@ const Read = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/posts');
+        // Use the raw GitHub URL for the JSON file
+        const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
         setPosts(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
