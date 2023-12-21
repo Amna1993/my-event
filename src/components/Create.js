@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Create = ({ setPosts }) => {
+const Create = () => {
   const [newPostTitle, setNewPostTitle] = useState('');
 
   const handleInputChange = (event) => {
@@ -10,14 +10,34 @@ const Create = ({ setPosts }) => {
 
   const handleCreatePost = async () => {
     try {
-      const response = await axios.post('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json/posts', {
+      // Fetch the current content of db.json from GitHub
+      const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
+      const currentData = response.data;
+
+      // Add a new post to the array
+      const newPost = {
+        id: Date.now(), // Assign a unique ID (for simplicity, using timestamp)
         title: newPostTitle,
-      });
+      };
 
-      // Assuming response.data is the newly created post object
-      // Update the posts array using the setPosts function
-      setPosts((prevPosts) => [...prevPosts, response.data]);
+      currentData.push(newPost);
 
+      // Update the content of db.json on GitHub
+      await axios.put(
+        'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
+        {
+          message: 'Create post',
+          content: Buffer.from(JSON.stringify(currentData)).toString('base64'),
+          sha: response.data.sha,
+        },
+        {
+          headers: {
+            Authorization: `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`, // Replace with your GitHub token
+          },
+        }
+      );
+
+      // Clear the input field after creating a post
       setNewPostTitle('');
     } catch (error) {
       console.error('Error creating post:', error);
