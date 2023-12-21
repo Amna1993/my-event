@@ -1,5 +1,4 @@
 // functions/fetchData.js
-
 const axios = require('axios');
 
 exports.handler = async function (event, context) {
@@ -7,7 +6,7 @@ exports.handler = async function (event, context) {
     const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
     return {
       statusCode: 200,
-      body: JSON.stringify(response.data),
+      body: JSON.stringify(response.data.posts || []), // Ensure it's an array
     };
   } catch (error) {
     console.error('Error fetching data:', error);
