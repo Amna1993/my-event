@@ -7,9 +7,17 @@ const Read = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Use the raw GitHub URL for the JSON file
         const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
-        setPosts(response.data);
+        
+        if (Array.isArray(response.data)) {
+          // If the data is an array, set it directly
+          setPosts(response.data);
+        } else if (response.data && response.data.posts) {
+          // If the data has a 'posts' property, assume it's the array of posts
+          setPosts(response.data.posts);
+        } else {
+          console.error('Unexpected data structure:', response.data);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -20,9 +28,11 @@ const Read = () => {
 
   return (
     <ul>
-      {posts.map(post => (
-        <li key={post.id}>{post.title}</li>
-      ))}
+      {Array.isArray(posts) && posts.length > 0 ? (
+        posts.map(post => <li key={post.id}>{post.title}</li>)
+      ) : (
+        <p>No posts available</p>
+      )}
     </ul>
   );
 };
