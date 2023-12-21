@@ -1,25 +1,15 @@
 {
   "posts": [
     {
-      "title": "amna",
-      "id": 1
-    },
-    {
-      "title": "hey",
+      "title": "Checking updates",
       "id": 2
     },
     {
-      "title": "hello",
-      "id": 3
+      "title": "netlify",
+      "id": 4
     }
   ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
+  "comments": [],
   "profile": {
     "name": "typicode"
   }

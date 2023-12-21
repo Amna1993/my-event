@@ -9,23 +9,34 @@ function App() {
   const [showRead, setShowRead] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   const handleReadClick = () => {
     setShowRead(!showRead);
     setShowCreate(false);
     setShowUpdate(false);
+    setShowDelete(false);
   };
 
   const handleCreateClick = () => {
     setShowCreate(!showCreate);
     setShowRead(false);
     setShowUpdate(false);
+    setShowDelete(false);
   };
 
   const handleUpdateClick = () => {
     setShowUpdate(!showUpdate);
     setShowRead(false);
     setShowCreate(false);
+    setShowDelete(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDelete(!showDelete);
+    setShowRead(false);
+    setShowCreate(false);
+    setShowUpdate(false);
   };
 
   return (
@@ -50,7 +61,11 @@ function App() {
       {/* Conditionally render the Update component based on the showUpdate state */}
       {showUpdate && <Update />}
 
-      <Delete />
+      {/* Button to toggle the Delete component */}
+      <button onClick={handleDeleteClick}>Delete</button>
+
+      {/* Conditionally render the Delete component based on the showDelete state */}
+      {showDelete && <Delete />}
     </div>
   );
 }
