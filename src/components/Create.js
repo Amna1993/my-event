@@ -13,6 +13,7 @@ const Create = () => {
     try {
       // Fetch the current content of db.json from the Netlify function
       const fetchDataResponse = await axios.get('/.netlify/functions/fetchData');
+
       const currentData = fetchDataResponse.data;
 
       // Add a new post to the array
