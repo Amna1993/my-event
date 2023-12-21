@@ -14,26 +14,29 @@ const Create = () => {
       const response = await axios.get(
         'https://api.github.com/repos/Amna1993/my-event/contents/db.json'
       );
-
+  
       // Parse the content of the file
       const currentData = JSON.parse(
         atob(response.data.content.replace(/\s/g, ''))
       );
-
+  
+      // Check if currentData is an array, otherwise initialize it as an array
+      const newData = Array.isArray(currentData) ? currentData : [];
+  
       // Add a new post
       const newPost = {
-        id: currentData.length + 1,
+        id: newData.length + 1,
         title: newPostTitle,
       };
-
-      currentData.push(newPost);
-
+  
+      newData.push(newPost);
+  
       // Update the content of db.json on GitHub
       await axios.put(
         'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
         {
           message: 'Create post',
-          content: btoa(JSON.stringify(currentData)),
+          content: btoa(JSON.stringify(newData)),
           sha: response.data.sha,
         },
         {
@@ -42,13 +45,14 @@ const Create = () => {
           },
         }
       );
-
+  
       // Clear the input field after creating a post
       setNewPostTitle('');
     } catch (error) {
       console.error('Error creating post:', error);
     }
   };
+  
 
   return (
     <div>
