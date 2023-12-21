@@ -1,9 +1,16 @@
 {
   "posts": [
     {
-      "id": 1,
-      "title": "hello json-server",
-      "author": "typicode"
+      "title": "amna",
+      "id": 1
+    },
+    {
+      "title": "hey",
+      "id": 2
+    },
+    {
+      "title": "hello",
+      "id": 3
     }
   ],
   "comments": [
