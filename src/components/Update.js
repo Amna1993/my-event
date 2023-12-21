@@ -15,12 +15,20 @@ const Update = () => {
 
   const handleUpdatePost = async () => {
     try {
-      // Fetch the current content of db.json from GitHub
-      const response = await axios.get('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json');
-      const currentData = response.data;
+      // Fetch the current content of db.json from GitHub using the GitHub API
+      const response = await axios.get(
+        'https://api.github.com/repos/Amna1993/my-event/contents/db.json'
+      );
+
+      // Parse the content of the file
+      const currentData = JSON.parse(
+        Buffer.from(response.data.content, 'base64').toString('utf-8')
+      );
 
       // Find the index of the post to update
-      const indexToUpdate = currentData.findIndex((post) => post.id === parseInt(postId));
+      const indexToUpdate = currentData.findIndex(
+        (post) => post.id === parseInt(postId)
+      );
 
       // If the post exists, update its title
       if (indexToUpdate !== -1) {
@@ -31,8 +39,10 @@ const Update = () => {
           'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
           {
             message: 'Update post',
-            content: Buffer.from(JSON.stringify(currentData)).toString('base64'),
-            sha: response.headers['etag'],
+            content: Buffer.from(JSON.stringify(currentData)).toString(
+              'base64'
+            ),
+            sha: response.data.sha,
           },
           {
             headers: {
