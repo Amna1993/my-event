@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Create = () => {
+const Create = ({ setPosts }) => {
   const [newPostTitle, setNewPostTitle] = useState('');
 
   const handleInputChange = (event) => {
@@ -10,49 +10,19 @@ const Create = () => {
 
   const handleCreatePost = async () => {
     try {
-      // Fetch the current content of db.json from GitHub using the GitHub API
-      const response = await axios.get(
-        'https://api.github.com/repos/Amna1993/my-event/contents/db.json'
-      );
-  
-      // Parse the content of the file
-      const currentData = JSON.parse(
-        atob(response.data.content.replace(/\s/g, ''))
-      );
-  
-      // Check if currentData is an array, otherwise initialize it as an array
-      const newData = Array.isArray(currentData) ? currentData : [];
-  
-      // Add a new post
-      const newPost = {
-        id: newData.length + 1,
+      const response = await axios.post('https://raw.githubusercontent.com/Amna1993/my-event/main/db.json/posts', {
         title: newPostTitle,
-      };
-  
-      newData.push(newPost);
-  
-      // Update the content of db.json on GitHub
-      await axios.put(
-        'https://api.github.com/repos/Amna1993/my-event/contents/db.json',
-        {
-          message: 'Create post',
-          content: btoa(JSON.stringify(newData)),
-          sha: response.data.sha,
-        },
-        {
-          headers: {
-            Authorization: `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`, // Replace with your GitHub token
-          },
-        }
-      );
-  
-      // Clear the input field after creating a post
+      });
+
+      // Assuming response.data is the newly created post object
+      // Update the posts array using the setPosts function
+      setPosts((prevPosts) => [...prevPosts, response.data]);
+
       setNewPostTitle('');
     } catch (error) {
       console.error('Error creating post:', error);
     }
   };
-  
 
   return (
     <div>
