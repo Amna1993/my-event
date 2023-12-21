@@ -15,9 +15,9 @@ const Delete = () => {
       const currentData = response.data;
 
       // Find the index of the post to delete
-      const indexToDelete = currentData.findIndex((post) => post.id === postId);
+      const indexToDelete = currentData.findIndex((post) => post.id === parseInt(postId));
 
-      // If the post exists, remove it
+      // If the post exists, remove it from the array
       if (indexToDelete !== -1) {
         currentData.splice(indexToDelete, 1);
 
@@ -31,7 +31,7 @@ const Delete = () => {
           },
           {
             headers: {
-              Authorization: `Bearer YOUR_GITHUB_TOKEN`, // Replace with your GitHub token
+              Authorization: `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`, // Replace with your GitHub token
             },
           }
         );

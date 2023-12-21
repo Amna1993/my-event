@@ -20,7 +20,7 @@ const Update = () => {
       const currentData = response.data;
 
       // Find the index of the post to update
-      const indexToUpdate = currentData.findIndex((post) => post.id === postId);
+      const indexToUpdate = currentData.findIndex((post) => post.id === parseInt(postId));
 
       // If the post exists, update its title
       if (indexToUpdate !== -1) {
@@ -36,7 +36,7 @@ const Update = () => {
           },
           {
             headers: {
-              Authorization: `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`, // Replace with your GitHub token
+              Authorization: `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`, // Replace with your GitHub token
             },
           }
         );
